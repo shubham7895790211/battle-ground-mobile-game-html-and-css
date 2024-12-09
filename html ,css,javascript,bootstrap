@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #242424;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .sidebar {
+            background-color: #333;
+            color: white;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #444;
+        }
+        .content {
+            padding: 2rem;
+        }
+        .user-table {
+            margin-top: 1rem;
+        }
+        .action-buttons .btn {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Management - Battleground Mobile Game</h1>
+    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar">
+                <h3>Admin Menu</h3>
+                <a href="#dashboard" class="active">Dashboard</a>
+                <a href="#players">Manage Players</a>
+                <a href="#bans">Bans</a>
+                <a href="#rewards">Rewards</a>
+                <a href="#stats">Game Stats</a>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 content">
+                <h2>Player Management</h2>
+                <!-- Form for Adding/Editing Player -->
+                <form id="playerForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="level" class="form-label">Level</label>
+                        <input type="number" class="form-control" id="level" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rank" class="form-label">Rank</label>
+                        <select id="rank" class="form-select" required>
+                            <option value="">Select Rank</option>
+                            <option value="Bronze">Bronze</option>
+                            <option value="Silver">Silver</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Platinum">Platinum</option>
+                            <option value="Diamond">Diamond</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+                <!-- Player Table -->
+                <table class="table table-striped table-bordered user-table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Level</th>
+                            <th>Rank</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td>PlayerOne</td>
+                            <td>25</td>
+                            <td>Diamond</td>
+                            <td class="action-buttons">
+                                <button class="btn btn-success btn-sm edit-button">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-warning btn-sm ban-button">
+                                    <i class="fas fa-ban"></i> Ban
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-button">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>102</td>
+                            <td>ProGamer</td>
+                            <td>30</td>
+                            <td>Platinum</td>
+                            <td class="action-buttons">
+                                <button class="btn btn-success btn-sm edit-button">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-warning btn-sm ban-button">
+                                    <i class="fas fa-ban"></i> Ban
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-button">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form Validation
+        document.getElementById('playerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const level = document.getElementById('level').value;
+            const rank = document.getElementById('rank').value;
+
+            if (!username || !level || !rank) {
+                alert('All fields are required!');
+                return;
+            }
+
+            if (level < 1) {
+                alert('Level must be at least 1.');
+                return;
+            }
+
+            alert('Form submitted successfully!');
+            this.reset(); // Clear the form
+        });
+
+        // Ban and Delete Confirmation
+        document.querySelectorAll('.ban-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const confirmBan = confirm('Are you sure you want to ban this player?');
+                if (confirmBan) {
+                    alert('Player banned!');
+                }
+            });
+        });
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const confirmDelete = confirm('Are you sure you want to delete this player?');
+                if (confirmDelete) {
+                    alert('Player deleted!');
+                }
+            });
+        });
+
+        // Edit Button Handler
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const username = row.cells[1].textContent;
+                const level = row.cells[2].textContent;
+                const rank = row.cells[3].textContent;
+
+                document.getElementById('username').value = username;
+                document.getElementById('level').value = level;
+                document.getElementById('rank').value = rank;
+
+                alert('Edit the form and submit changes.');
+            });
+        });
+    </script>
+</body>
+</html>
